@@ -1,10 +1,15 @@
+
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
 <%@ page contentType="text/html; charset=euc-kr" %>
-
 <%@ page import="com.model2.mvc.service.domain.User" %>
-
 <%
 	User user=(User)session.getAttribute("user");
 %>
+ --%>
+
 
 <html>
 <head>
@@ -25,19 +30,32 @@
     <td width="800" height="30"><h2>Model2 MVC Shop</h2></td>
   </tr>
   <tr>
+  	<td align="left">ÃÑ ¹æ¹®ÀÚ ¼ö: ${visit}</td>
+  </tr>
+  <tr>
     <td height="20" align="right" background="/images/img_bg.gif">
 	    <table width="200" border="0" cellspacing="0" cellpadding="0">
 	        <tr> 
 	          <td width="115">
-		          <%	if(user == null) { %>
+	          <c:if test = "${empty user}">
 		              <a href="/user/loginView.jsp" target="rightFrame">login</a>   
-		          <%}%>        
+		      </c:if>         
+	          	<%--
+	          	<%	if(user == null) { %>
+		              <a href="/user/loginView.jsp" target="rightFrame">login</a>   
+		          <%}%>    
+	          	 --%>
 	          </td>
 	          <td width="14">&nbsp;</td>
 	          <td width="56">
-		          <% if(user != null) {  %>
+	          <%--
+	          <% if(user != null) {  %>
 		            	<a href="/logout.do" target="_parent">logout</a>  
 		           <% } %>
+	           --%>
+		          <c:if test = "${!empty user }">
+		            	<a href="/logout.do" target="_parent">logout</a>  
+		           </c:if>
 	          </td>
 	        </tr>
 	      </table>

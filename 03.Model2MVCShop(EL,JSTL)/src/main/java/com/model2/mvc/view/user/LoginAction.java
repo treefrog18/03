@@ -18,13 +18,15 @@ public class LoginAction extends Action{
 		User user=new User();
 		user.setUserId(request.getParameter("userId"));
 		user.setPassword(request.getParameter("password"));
-		
+		String userId = user.getUserId();
+
 		UserService userService=new UserServiceImpl();
 		User dbUser=userService.loginUser(user);
 		
 		HttpSession session=request.getSession();
 		session.setAttribute("user", dbUser);
-		
+		session.setAttribute("userId", userId);
+
 		return "redirect:/index.jsp";
 	}
 }

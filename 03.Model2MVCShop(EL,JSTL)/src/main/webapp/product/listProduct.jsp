@@ -88,9 +88,11 @@ function fncGetList(currentPage){
 			<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품번호</option>
 			<option value="1"  ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품명</option>
 			<option value="2"  ${ ! empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>	
+			<option value="3"  ${ ! empty search.searchCondition && search.searchCondition==3 ? "selected" : "" }>가격높은순</option>
+			<option value="4"  ${ ! empty search.searchCondition && search.searchCondition==4 ? "selected" : "" }>가격낮은순</option>
 			</select>
 			<input 	type="text" name="searchKeyword" 
-			value="${! empty search.searchKeyword ? search.searchKeyword : ""}"  
+			value="${! empty search.searchKeyword ? search.searchKeyword : "" }"  
 			class="ct_input_g" style="width:200px; height:20px" >
 		</td>
 		<td align="right" width="70">
@@ -189,7 +191,33 @@ function fncGetList(currentPage){
 		<td align="left">${product.regDate}</td>
 		<td></td>
 		<td align="left">
-		판매중
+		<c:if test="${product.proTranCode.equals('0')}">
+		판매중&nbsp;&nbsp;&nbsp;
+		</c:if>
+		
+		<c:if test="${menu.equals('manage') and product.proTranCode.equals('1') }">
+		구매완료&nbsp;&nbsp;&nbsp;<a href="/updateTranCode.do?prodNo=${product.prodNo}&tranCode=${product.proTranCode}">배송하기</a>
+		</c:if>
+		
+		<c:if test="${menu.equals('manage') and product.proTranCode.equals('2') }">
+		배송중&nbsp;&nbsp;&nbsp;
+		</c:if>
+		
+		<c:if test="${menu.equals('manage') and product.proTranCode.equals('3') }">
+		배송완료&nbsp;&nbsp;&nbsp;
+		</c:if>
+
+		<c:if test="${menu.equals('search') and product.proTranCode.equals('1') }">
+		재고없음&nbsp;&nbsp;&nbsp;
+		</c:if>
+		
+		<c:if test="${menu.equals('search') and product.proTranCode.equals('2') }">
+		재고없음&nbsp;&nbsp;&nbsp;
+		</c:if>
+		
+		<c:if test="${menu.equals('search') and product.proTranCode.equals('3') }">
+		재고없음&nbsp;&nbsp;&nbsp;
+		</c:if>
 		</td>
 	</tr>
 	<tr>

@@ -86,6 +86,13 @@ function history(){
 					<a href="/listProduct.do?menu=search" target="rightFrame">상 품 검 색</a>
 				</td>
 			</tr>
+			<% if(role.equals("admin")){%>
+			<tr>
+				<td class="Depth03">
+					<a href="/listSale.do" target="rightFrame">판매이력조회</a>
+				</td>
+			</tr>
+			<%} %>
 			<%	if(vo != null && role.equals("user")){%>
 			<tr>
 				<td class="Depth03">

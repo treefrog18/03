@@ -39,7 +39,9 @@ public class ProductDAO {
 		
 		Connection con = DBUtil.getConnection();
 
-		String sql = "select * from PRODUCT where PROD_NO=?";
+		String sql = "select p.prod_no, p.prod_name, p.image_file, p.prod_detail,"
+				+ "p.manufacture_day, p.price, p.reg_date, nvl(t.tran_status_code, 0) tran_status_code from PRODUCT p, TRANSACTION t "
+				+ "where p.prod_no = t.prod_no(+) AND p.PROD_NO=?";
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setInt(1, prodNo);
@@ -56,6 +58,7 @@ public class ProductDAO {
 			product.setManuDate(rs.getString("MANUFACTURE_DAY"));
 			product.setPrice(rs.getInt("PRICE"));
 			product.setRegDate(rs.getDate("REG_DATE"));
+			product.setProTranCode(rs.getString("tran_status_code"));
 
 		}
 		
@@ -71,20 +74,31 @@ public class ProductDAO {
 		Connection con = DBUtil.getConnection();
 		
 		// Original Query ±¸¼º
-		String sql = "SELECT * FROM product ";
+		String sql = "select p.prod_no, p.prod_name, p.reg_date, p.price,"
+				+ " nvl(t.tran_status_code, 0) tran_status_code  "
+				+ "from product p, transaction t"
+				+ " where p.prod_no = t.prod_no(+) ";
 		
 		if (search.getSearchCondition() != null) {
 			if ( search.getSearchCondition().equals("0") &&  !search.getSearchKeyword().equals("") ) {
-				sql += " WHERE prod_no = '" + search.getSearchKeyword()+"'";
+				sql += " AND p.prod_no = '" + search.getSearchKeyword()+"'"
+						+ " ORDER BY p.prod_no";
 			
 			} else if ( search.getSearchCondition().equals("1") && !search.getSearchKeyword().equals("")) {
-				sql += " WHERE prod_name LIKE '" + search.getSearchKeyword() + "%'";
-			
+				sql += " AND p.prod_name LIKE '" + search.getSearchKeyword() + "%'"
+						+ " ORDER BY p.prod_no";
 			} else if ( search.getSearchCondition().equals("2") && !search.getSearchKeyword().equals("")) {
-				sql += " WHERE price ='" + search.getSearchKeyword() + "'";
-			}
+				sql += " AND p.price ='" + search.getSearchKeyword() + "'"
+						+ " ORDER BY p.prod_no";
+			} else if (search.getSearchCondition().equals("3")) {
+				sql += " ORDER BY p.price desc";
+			} else if (search.getSearchCondition().equals("4")) {
+				sql += " ORDER BY p.price";
+			}			
+		}else {
+			sql += "ORDER BY p.prod_no";
 		}
-		sql += " ORDER BY prod_no";
+
 		
 		System.out.println("ProductDAO::Original SQL :: " + sql);
 		
@@ -107,6 +121,7 @@ public class ProductDAO {
 			product.setProdName(rs.getString("prod_name"));
 			product.setRegDate(rs.getDate("reg_date"));
 			product.setPrice(rs.getInt("price"));
+			product.setProTranCode(rs.getString("tran_status_code").trim());
 			list.add(product);
 		}
 		
